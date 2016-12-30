@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="utf-8">
+
+    {% load staticfiles %}
+    {% load i18n %}
+
+    {% block basestyle %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker3.min.css">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'ucaplantillas/css/base.css' %}"/>
+    {% endblock basestyle %}
+
+    {% block extrastyle %}{% endblock extrastyle %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- DataTables -->
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.9/js/dataTables.bootstrap.min.js"></script>
+
+    <!-- Datepicker -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/locales/bootstrap-datepicker.es.min.js"></script>
+
+    {% block extrascript %}{% endblock extrascript %}
+
+    <script>
+        // Configurar DataTables con los textos en español
+        $.extend( true, $.fn.dataTable.defaults, {
+            "language": { "url": "https://cdn.datatables.net/plug-ins/1.10.9/i18n/Spanish.json"},
+        } );
+    </script>
+
+    <title>{% block titulo %}{% endblock titulo %}</title>
+
+    {% block extrahead %}{% endblock extrahead %}
+
+    {% block robots %}
+    <meta name="robots" content="NONE,NOARCHIVE"/>
+    {% endblock robots %}
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="row encabezado">
+        <div class="col-xs-6">
+            <h1>
+                <a href="http://www.uca.es">
+                    <img src="{% static "ucaplantillas/images/logoUCA.gif" %}" alt="Universidad de Cádiz"/>
+                </a>
+            </h1>
+        </div>
+        <div class="col-xs-6 autenticacion">
+            {% block autenticacion %}
+                {% if user.is_authenticated %}
+                    <p>Bienvenido / Welcome, {{ user.first_name }} {{ user.last_name }} (<a href="/logout">Cerrar sesión / logout</a>).</p>
+                {% else %}
+                    <p><a href="/login">Iniciar sesión</a></p>
+                {% endif %}
+            {% endblock autenticacion %}
+        </div>
+    </div>
+    {% block organo %} {% endblock %}
+    <div class="row" id="navegacion">
+        {% block navegacion %}
+            <ul class="list-inline col-md-12">
+            {% for item in navigation %}
+                <li class="{% if item.active %}activo{% endif %}">
+                    <a href="{{ item.url }}">{{ item.label }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endblock navegacion %}
+    </div>
+
+    <div class="row" id="subnavegacion">
+        {% block subnavegacion %}
+            <ul class="list-inline col-md-12">
+            {% for item in subnavigation %}
+                <li class="{% if item.active %}activo{% endif %}">
+                    <a href="{{ item.url }}">{{ item.label }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endblock %}
+    </div>
+
+    <div class="row" id="subsubnavegacion">
+        {% block subsubnavegacion %}
+            <ul class="list-inline col-md-12">
+            {% for item in subsubnavigation %}
+                <li class="{% if item.active %}activo{% endif %}">
+                    <a href="{{ item.url }}">{{ item.label }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endblock %}
+    </div>
+
+    <div class="row" id="migasdepan">
+        {% block migasdepan %}{% endblock migasdepan %}
+    </div>
+
+    {% block listamensajes %}
+        {% if messages %}
+            <div class="row" id="listamensajes">
+                <ul>
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endblock listamensajes %}
+
+    <div class="row" id="contenido">
+        <div class="col-md-12">
+            {% block contenido %}{% endblock contenido %}
+        </div>
+    </div>
+
+    <div class="row" id="pie">
+        <div class="col-md-12 text-center" id="copyright">
+            &copy; Copyright Universidad de Cádiz
+        </div>
+    </div>
+
+</div>
+
+<script>
+$(function()
+{
+    // Inicializar DatePicker
+    $('input.datepicker, .datepicker > input').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'es',
+        todayBtn: "linked",
+    });
+});
+
+</script>
+</body>
+</html>
+

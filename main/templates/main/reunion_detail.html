@@ -1,0 +1,120 @@
+{% extends "ucaplantillas/base.html" %}
+{% load extras %}
+{% load bootstrap3 %}
+{% block organo %}<h4>Órgano Actual:
+    {% if request.session.organo %}
+        {{ request.session.organo }}
+    {% else %}
+        <span class="label label-danger">No ha seleccionado ningún órgano sobre el que trabajar</span>
+    {% endif %}
+</h4><br>{% endblock %}
+{% block contenido %}
+
+
+    <fieldset>
+        <legend>Detalles de la reunión del {{ reunion.fecha_hora }}</legend>
+
+        <div class="list-group">
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Órgano:</h4>
+
+                <p class="list-group-item-text">{{ reunion.organo }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Fecha de creación:</h4>
+
+                <p class="list-group-item-text">{{ reunion.fecha_creacion }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Fecha de la última modificación:</h4>
+
+                <p class="list-group-item-text">{{ reunion.fecha_modificacion }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Lugar:</h4>
+
+                <p class="list-group-item-text">{{ reunion.lugar }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Creador:</h4>
+
+                <p class="list-group-item-text">{{ reunion.creador }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Duración estimada:</h4>
+
+                <p class="list-group-item-text">{{ reunion.duracion_estimada }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Estado:</h4>
+                {% if reunion.estado_reunion == 'CRE' %}
+                    <p class="list-group-item-text">Creada</p><br>
+                {% elif reunion.estado_reunion == 'CONV' %}
+                    <p class="list-group-item-text">Convocada</p><br>
+                {% elif reunion.estado_reunion == 'CELE' %}
+                    <p class="list-group-item-text">Celebrada</p><br>
+                {% endif %}
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Puntos del orden del día:</h4>
+                {% for punto in puntos %}
+                    {% if not view.usuario_tiene_permiso %}
+                        <p class="list-group-item-text"><a href="{% url 'punto_detail' pk=punto.pk %}">{{ punto.nombre_admin }}</a></p><br>
+                    {% else %}
+                        {% if reunion.estado_reunion == 'CONV' %}
+                            <a class="list-group-item-text btn btn-primary"
+                               href="{% url 'punto_update_resolucion' punto.pk reunion.pk %}">Escribir resolucion del
+                                punto: {{ punto }}</a>
+                            <a class="list-group-item-text btn btn-info"
+                               href="{% url 'punto_update_seguimiento' punto.pk reunion.pk %}">Seguimiento del punto: {{ punto }}</a><br><br>
+                        {% elif reunion.estado_reunion == 'CRE' %}
+                            <p class="list-group-item-text"><a href="{% url 'punto_detail' pk=punto.pk %}">{{ punto.nombre_admin }}</a></p><br>
+                        {% else %}
+                            <br>
+                            <p class="list-group-item-text"><b><a href="{% url 'punto_detail' pk=punto.pk %}">{{ punto.nombre_admin }}:</a></b><br>{{ punto.resolucion }}</p>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        <div class="list-group-item">
+             <h4 class="list-group-item-heading">Asistentes:</h4>
+            {% if reunion.asistentes == None %}
+             <p class="list-group-item-text">Ninguno<br><br>
+            {% else %}
+             <p class="list-group-item-text">{{ reunion.asistentes }}<br><br>
+            {% endif %}
+        {%if reunion.estado_reunion == 'CONV'%}
+            <a class="btn btn-warning" href="{% url 'reunion_asistentes' reunion.pk %}">Editar</a></p><br>
+        {% endif %}
+        </div>
+
+
+    </fieldset>
+
+    {% if view.usuario_tiene_permiso %}
+        {% if reunion.estado_reunion == 'CRE' %}
+            <a class="col-md-2 col-md-offset-5 btn btn-primary btn-success"
+               href="{% url 'convocar_reunion' reunion.pk %}">
+                Convocar
+            </a>
+        {% elif reunion.estado_reunion == 'CONV' %}
+            <a class="col-md-2 col-md-offset-2 btn btn-primary btn-success"
+               href="{% url 'cerrar_acta' reunion.pk %}">
+                Terminar reunion
+            </a>
+            <a class="col-md-2 col-md-offset-4 btn btn-primary btn-danger" href="{% url 'desconvocar_reunion' reunion.pk %}">
+                 Desconvocar
+            </a>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

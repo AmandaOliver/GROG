@@ -1,0 +1,96 @@
+<!-- Plantilla de ejemplo de uso de los distintos bloques de la plantilla base ucaplantillas/base.html   -->
+<!-- Hay que tener en cuenta que no es necesario usar todos los bloques, aunque algunos son obligatorios -->
+{% extends "ucaplantillas/base.html" %}
+
+
+<!-- Bloque para añadir estilo adicional -->
+{% block extrastyle %}
+    <link rel="stylesheet" type="text/css" href=".../css/miestilo.css' %}" />
+
+    <style>
+        h1 {color:red;}
+        p {color:blue;}
+    </style>
+{% endblock extrastyle %}
+
+
+<!-- Bloque para añadir javascript -->
+{% block extrascript %}
+    <script language="Javascript" type="text/javascript" src="'.../js/miscript.js'"></script>
+
+    <script type="text/javascript" language="javascript">
+        function miFuncion() {
+            alert('Hola mundo');
+        }
+    </script>
+{% endblock extrascript %}
+
+
+<!-- El título de la página, normalmente sale en la barra del navegador y/o en la pestaña -->
+{% block titulo %}Página de prueba{% endblock titulo %}
+
+
+<!-- Bloque para agregar elementos adicionales a la cabecera -->
+{% block extrahead %}
+    <base href="http://localhost:8000/" target="_blank">
+    <meta name="keywords" content="Universidad, Educacion, Investigacion">
+{% endblock extrahead %}
+
+
+<!-- Bloque para cambiar el comportamiento por defecto de los robots -->
+{% block robots %}
+    <meta name="robots" content="INDEX,FOLLOW" />
+{% endblock robots %}
+
+
+<!-- Menu principal de navegacion -->
+{% block navegacion %}
+    <ul>
+        <li class="activo">
+            <a href="#">estudiantes</a>
+        </li>
+        <li>
+            <a href="#">profesores</a>
+    	</li>
+    	<li>
+        	<a href="#">administracion y servicios</a>
+        </li>
+    </ul>
+{% endblock navegacion %}
+
+
+<!-- Menu secundario de navegacion -->
+{% block subnavegacion %}
+    <ul>
+        <li>
+            <a href="#">Estudios</a>
+        </li>
+        <li class="activo">
+            <a href="#">Investigacion</a>
+    	</li>
+    </ul>
+{% endblock subnavegacion %}
+
+
+<!-- Migas de pan, permite moverse facilmente a través de la jerarquía de páginas -->
+{% block migasdepan %}
+    <em>Estás en:</em>
+    <ol>
+        <li><a href="#">Estudiantes</a></li>
+        <li class="migaactiva"><a href="#">Investigación</a></li>
+    </ol>
+{% endblock migasdepan %}
+
+
+<!-- Bloque mensajes: mensajes informativos del framework -->
+<!-- info: https://docs.djangoproject.com/en/dev/ref/contrib/messages/ -->
+<!-- Si no se quiere mostrar agregar el bloque vacio -->
+
+
+<!-- Bloque principal con el contenido de la página -->
+{% block contenido %}
+    <div style="padding: 15px">
+        <span><b>Contenido principal de la página</b></span>
+    </div>
+{% endblock contenido %}
+

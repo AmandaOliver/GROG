@@ -1,0 +1,116 @@
+{% extends "ucaplantillas/base.html" %}
+{% load ucaplantillas %}
+{% load bootstrap3 %}
+{% block organo %}<h4>Órgano Actual:
+    {% if request.session.organo %}
+        {{ request.session.organo }}
+    {% else %}
+        <span class="label label-danger">No ha seleccionado ningún órgano sobre el que trabajar</span>
+    {% endif %}
+</h4><br>{% endblock %}
+{% block extrascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css"/>
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+
+    {{ form.media }}
+
+{% endblock extrascript %}
+
+{% block contenido %}
+    <fieldset>
+        <legend>Crear Reunión</legend>
+
+        <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form_errors form %}
+            {% bootstrap_form form layout="horizontal" size="small" %}
+            {{ formset.management_form }}
+            {% for error in formset.non_form_errors %}
+                <div class="row">
+                    <div class="col-sm-12 alert alert-danger">
+                        <span class="fa fa-warning"></span><strong>Se han detectado errores</strong>
+                        <ul>
+                            <li>{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}<br><br>
+            <h4 class="col-md-offset-3">Puntos del día: </h4>
+            <p class="col-md-offset-3">Introduzca los puntos según el orden en el que vayan a ser tratados.</p>
+            <table class="table col-md-offset-3" id="table-formset">
+                <tbody>
+                {% for form in formset %}
+
+                    <tr class="fila-form">
+                        {% for field in form %}
+                            {% if not field.is_hidden %}
+                                <td>
+                                    Punto: {{ form.punto }}
+                                </td>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+
+                    {% if form.errors %}
+                        <tr>
+                            <td colspan="3" style="border-top:0 !important;">
+                                <div class="alert alert-danger">
+                                    <span class="fa fa-warning"></span>
+                                    <strong>Se han detectado errores:</strong>
+                                    <ul>{{ form.errors }}</ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="col-md-offset-2" id="boton-mas">
+                <div class="col-sm-2" style="text-align: right">
+                    <button class="btn btn-default btn-circle" type="button" id="add-form">
+                        <i class="glyphicon glyphicon-plus"> </i>
+                    </button>
+                </div>
+            </div>
+            <br><br>
+            {% buttons submit='OK' field_class="col-md-9 col-md-offset-3" %}{% endbuttons %}
+        </form>
+    </fieldset>
+    <script>
+$(document).ready( function() {
+// Clonando la última fila
+    $("#boton-mas").on('click', '#add-form', function(event){
+        event.preventDefault();
+        ultima_fila = $("#table-formset tr:last");
+        while(ultima_fila.attr('class') != 'fila-form'){
+            ultima_fila.remove();
+            ultima_fila = $("#table-formset tr:last");
+        }
+        cloneMore('#table-formset tr:last', 'form');
+    });
+});
+
+function cloneMore(selector, type) {
+    var newElement = $(selector).clone(true);
+    var total = $('#id_' + type + '-TOTAL_FORMS').val();
+    newElement.find(':input').each(function() {
+        var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+        var id = 'id_' + name;
+        $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+    });
+    newElement.find('label').each(function() {
+        var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+        $(this).attr('for', newFor);
+    });
+    total++;
+    $('#id_' + type + '-TOTAL_FORMS').val(total);
+    $(selector).after(newElement);
+}
+</script>
+{% endblock %}}

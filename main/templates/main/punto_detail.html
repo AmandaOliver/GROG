@@ -1,0 +1,142 @@
+{% extends "ucaplantillas/base.html" %}
+{% load extras %}
+{% load bootstrap3 %}
+{% block organo %}<h4>Órgano Actual:
+    {% if request.session.organo %}
+        {{ request.session.organo }}
+    {% else %}
+        <span class="label label-danger">No ha seleccionado ningún órgano sobre el que trabajar</span>
+    {% endif %}
+</h4><br>{% endblock %}
+{% block contenido %}
+    <fieldset>
+        <legend>Detalles de {{ punto.nombre_original }}</legend>
+
+        <div class="list-group">
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Órgano:</h4>
+                <p class="list-group-item-text">{{ punto.organo }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Nombre puesto por el administrador:</h4>
+                <p class="list-group-item-text">{{ punto.nombre_admin }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Comentarios del creador:</h4>
+                <p class="list-group-item-text">{{ punto.comentarios }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Comentarios del administrador:</h4>
+                <p class="list-group-item-text">{{ punto.comentarios_admin }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Tipo:</h4>
+                {% if punto.tipo_punto == 'INFO' %}
+                    <p class="list-group-item-text">Información</p><br>
+                {% elif punto.tipo_punto == 'APRO' %}
+                    <p class="list-group-item-text">Aprobación por Consejo de Dirección</p><br>
+                {% elif punto.tipo_punto == 'DSA' %}
+                    <p class="list-group-item-text">Deliberación sin aprobación por Consejo de Dirección</p><br>
+                {% elif punto.tipo_punto == 'DCA' %}
+                    <p class="list-group-item-text">Deliberación con aprobación por Consejo de Dirección</p><br>
+                {% endif %}
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Duración estimada:</h4>
+                <p class="list-group-item-text">{{ punto.duracion_estimada }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Fecha de creación:</h4>
+                <p class="list-group-item-text">{{ punto.fecha_creacion }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Fecha de la última modificación:</h4>
+                <p class="list-group-item-text">{{ punto.fecha_modificacion }}</p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Estado:</h4>
+                {% if punto.estado_punto == 'INPO' %}
+                    <p class="list-group-item-text">Informado positivamente</p><br>
+                {% elif punto.estado_punto == 'ACD' %}
+                    <p class="list-group-item-text">Aprobado por Consejo de Dirección</p><br>
+                {% elif punto.estado_punto == 'DEL' %}
+                    <p class="list-group-item-text">Deliberado</p><br>
+                {% elif punto.estado_punto == 'ST' %}
+                    <p class="list-group-item-text">Sin tratar</p><br>
+                {% elif punto.estado_punto == 'TRAS' %}
+                    <p class="list-group-item-text">Trasladado a otro Consejo</p><br>
+                {% elif punto.estado_punto == 'RECH' %}
+                    <p class="list-group-item-text">Rechazado</p><br>
+                {% elif punto.estado_punto == 'CONV' %}
+                    <p class="list-group-item-text">Convocado</p><br>
+                {% elif punto.estado_punto == 'ADD' %}
+                    <p class="list-group-item-text">Añadido a Reunion</p><br>
+                {% endif %}
+            </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">¿Requiere ser elevado a aprobación o información del Consejo de Gobierno?:</h4>
+                {% if punto.requiere_elevacion == True%}
+                    <p class="list-group-item-text">Si</p><br>
+                {% else %}
+                    <p class="list-group-item-text">No</p><br>
+                {% endif %}
+                <p class="list-group-item-text"></p><br>
+            </div>
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Creador:</h4>
+                <p class="list-group-item-text">{{ punto.creador }}</p><br>
+            </div>
+
+{#            {% if view.documentos_list != "None" %}#}
+{#                <div class="list-group-item">#}
+{#                    <h4 class="list-group-item-heading">Documentos adjuntos:</h4>#}
+{#                    {%  for doc in view.documentos_list %}#}
+{#                        <p class="list-group-item-text"><a href="{{ doc.documento.url }}">{{ doc.documento|filename }}</a></p><br>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            {% endif %}#}
+
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Invitados:</h4>
+                {% if not punto.invitados %}
+                    <p class="list-group-item-text">No hay invitados</p><br>
+                {% else %}
+                    {% for invitado in punto.invitados %}
+                        <p class="list-group-item-text">{{ invitado }}</p></br>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {% if punto.estado_punto != 'ST' %}
+                <div class="list-group-item">
+                    <h4 class="list-group-item-heading">Resolución:</h4>
+
+                    <p class="list-group-item-text">{{ punto.resolucion }}</p><br>
+                </div>
+            {% endif %}
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Miembros con los que se ha consensuado:</h4>
+
+                <p class="list-group-item-text">{{ punto.consensuado_con }}</p><br>
+            </div>
+        </div>
+    </fieldset>
+
+    {% if view.usuario_tiene_permiso and request.user.username != punto.creador.username %}
+        <a class="col-md-2 col-md-offset-5 btn btn-primary btn-success"
+            href="">
+            Enviar Correo al Creador
+        </a>
+    {% endif %}
+
+{% endblock %}

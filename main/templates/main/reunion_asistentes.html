@@ -1,0 +1,62 @@
+{% extends "ucaplantillas/base.html" %}
+{% load bootstrap3 %}
+{% load extras %}
+{% block organo %}<h4>Órgano Actual:
+    {% if request.session.organo %}
+        {{ request.session.organo }}
+    {% else %}
+        <span class="label label-danger">No ha seleccionado ningún órgano sobre el que trabajar</span>
+    {% endif %}
+</h4><br>{% endblock %}
+{% block contenido %}
+    <fieldset>
+        <legend>Seleccione los miembros que han asistido a la reunión del día: {{ reunion }}</legend>
+    <table class="table table-stripped table-bordered datatable" xmlns:common="http://www.w3.org/1999/xhtml">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>¿Añadido?</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for miembro in miembros %}
+                <tr>
+                 <td>
+                {{ miembro }}
+                </td>
+                <td>
+                {% reunion_asistentes reunion.pk as asistentes %}
+                    {%if miembro in asistentes %}
+                        No
+                    {% else %}
+                        Sí
+                    {% endif %}
+                </td>
+                <td>
+                    {% if miembro not in asistentes %}
+                        <form action="#" method="get">
+                            <input type="hidden" value="{{ miembro }}" name="miembro"/>
+                            <input type="submit" class="btn btn-xs btn-success" value="Añadir" name="add">
+                        </form>
+                    {% else %}
+                        <form action="#" method="get">
+                            <input type="hidden" value="{{ miembro }}" name="miembro2"/>
+                            <input type="submit" class="btn btn-xs btn-danger" value="Quitar" name="delete">
+                        </form>
+                    {% endif %}
+
+                </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+     <a class="col-md-2 col-md-offset-5 btn btn-primary btn-primary"
+               href="{% url 'reunion_detail' reunion.pk %}">
+                Listo
+            </a>
+     </fieldset>
+     <script>
+        $(".datatable").DataTable();
+    </script>
+{% endblock %}

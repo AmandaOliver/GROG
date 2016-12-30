@@ -1,0 +1,8 @@
+{% extends "ucaplantillas/base.html" %}
+{% load bootstrap3 %}
+{% block contenido %}
+<h1>Gestión de Reuniones de Órganos de Gobierno</h1>
+    {% for miembro in miembros %}
+    {{ miembro  }}<br>
+    {% endfor %}
+{% endblock %}

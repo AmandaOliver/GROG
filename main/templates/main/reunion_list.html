@@ -1,0 +1,97 @@
+{% extends "ucaplantillas/base.html" %}
+{% load bootstrap3 %}
+{% block organo %}<h4>Órgano Actual:
+    {% if request.session.organo %}
+        {{ request.session.organo }}
+    {% else %}
+        <span class="label label-danger">No ha seleccionado ningún órgano sobre el que trabajar</span>
+    {% endif %}
+</h4><br>{% endblock %}
+{% block contenido %}
+    <div class="col-md-offset-4 col-md-3 filtros"><p>Filtrar por estado:</p></div>
+    <table class="table table-stripped table-bordered datatable" xmlns:common="http://www.w3.org/1999/xhtml">
+        <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Lugar</th>
+            <th class="select-filter">Estado</th>
+            <th>Duración estimada</th>
+            {% if usuario_tiene_permiso %}
+                <th>Acciones</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for reunion in reuniones %}
+            <td>
+                <a href="{% url 'reunion_detail' reunion.pk %}"> {{ reunion.fecha_hora }}</a>
+            </td>
+            <td>
+                {{ reunion.lugar }}
+            </td>
+            <td>
+                {% if reunion.estado_reunion == 'CRE' %}
+                    Creada
+                {% elif reunion.estado_reunion == 'CONV' %}
+                    Convocada
+                {% elif reunion.estado_reunion == 'CELE' %}
+                    Celebrada
+                {% endif %}
+            </td>
+            <td>
+                {{ reunion.duracion_estimada }}
+            </td>
+            {% if usuario_tiene_permiso %}
+
+                {% if reunion.estado_reunion != 'CELE' %}
+                    <td>
+                        {% if reunion.estado_reunion == 'CRE' %}
+                            <a class="btn btn-danger btn-xs" href="{% url 'reunion_delete' pk=reunion.id %}">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Borrar
+                            </a>
+                            <a class="btn btn-xs btn-success" href="{% url 'convocar_reunion' reunion.pk %}">
+                                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Convocar
+                            </a>
+                        {% else %}
+                            <a class="btn btn-xs btn-danger" href="{% url 'desconvocar_reunion' reunion.pk %}">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Desconvocar
+                            </a>
+                        {% endif %}
+                    </td>
+                {% else %}
+                    <td>No se puede editar ni borrar</td>
+                {% endif %}
+            {% endif %}
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+
+        $('.datatable').DataTable({
+            "bSort" : false,
+            "initComplete": function () {
+                this.api().columns('.select-filter').every(function (number) {
+                    var column = this;
+                    var select = $('<select class="form-control"><option value=""></option></select>')
+                            .appendTo($(".filtros"))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                );
+
+                                column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                            });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            }
+        });
+    </script>
+{% endblock %}

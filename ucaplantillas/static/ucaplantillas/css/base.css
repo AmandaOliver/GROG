@@ -1,0 +1,299 @@
+body {
+    height: 100%;
+    font-family: Arial, Verdana, Helvetica, sans-serif;
+    color: #666;
+    background-color: #E8E5E0;
+}
+
+.dimensioncuerpo {
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    text-align: left;
+}
+
+.container {
+    /*font-size: 75%;*/
+    position: relative;
+}
+
+/* ENCABEZADO */
+.encabezado {
+    background: white;
+    /*padding: 10px;*/
+}
+
+.autenticacion {
+    padding-top: 10px;
+    text-align: right;
+}
+
+.encabezado h1 {
+    margin: 10px;
+}
+
+#encabezado a {
+    text-decoration: none;
+    color: #797a7d;
+}
+
+/* AUTENTICACIÓN */
+#autenticacion {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+/* MENU NAVEGACION */
+#navegacion {
+    background: #123645;
+}
+
+#navegacion ul {
+    padding: 0;
+    margin: 0;
+}
+#navegacion ul li a {
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    padding: 25px 10px 15px 15px;
+}
+
+#navegacion ul li a:hover {
+    text-decoration: underline;
+}
+
+#navegacion ul li.activo a {
+    color: #f7921e;
+}
+
+/**/
+
+/* SUBMENU NAVEGACION */
+#subnavegacion {
+    background: #335566;
+}
+
+#subnavegacion ul {
+    padding: 0;
+    margin: 0 0 0 15px;
+}
+
+#subnavegacion ul li a {
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    padding: 10px 10px 10px 0;
+}
+
+#subnavegacion ul li a:hover {
+    text-decoration: underline;
+}
+
+#subnavegacion ul li.activo a {
+    color: #f7921e;
+}
+
+/* SUBSUBNAVEGACION */
+
+#subsubnavegacion
+{
+    background-color: #497b93;
+}
+
+#subsubnavegacion ul {
+    margin: 0;
+}
+
+#subsubnavegacion a {
+    color: #fff;
+    font-size: 11px;
+    display: inline-block;
+    padding: 3px 0;
+}
+
+#subsubnavegacion .activo a {
+    color: #f7921e;
+}
+
+
+/* MIGAS DE PAN  */
+#migasdepan {
+    background: #e8e5e0;
+
+}
+
+#migasdepan em {
+    display: inline-block;
+    margin: 5px 5px 5px 10px;
+    font-style: normal;
+    color: #123645;
+}
+
+#migasdepan ol {
+    display: inline-block;
+    margin: 5px 0;
+    padding: 0;
+}
+
+#migasdepan li {
+    display: inline;
+}
+
+#migasdepan li + li::before {
+    content: "/";
+    font-weight: bold;
+    margin: 0 10px 0 8px;
+    color: #DE6C10;
+}
+
+#migasdepan a {
+    text-decoration: none;
+    color: #797a7d;
+}
+
+#migasdepan .migaactiva, #migasdepan li:last-child {
+    font-weight: bold;
+}
+
+/* LISTA DE MENSAJES */
+#listamensajes {
+}
+
+#listamensajes ul {
+    margin: 0;
+    padding: 0;
+}
+
+#listamensajes ul li {
+    font-size: 12px;
+    display: block;
+    padding: 4px 5px 4px 25px;
+    margin: 0 0 3px 0;
+    border-bottom: 1px solid #ddd;
+    color: #666;
+    background: #ffc url(../images/icon_success.gif) 5px .3em no-repeat;
+}
+
+#listamensajes ul li.warning {
+    background-image: url(../images/icon_alert.gif);
+}
+
+#listamensajes ul li.error {
+    background-image: url(../images/icon_error.gif);
+}
+
+/* CONTENIDO */
+#contenido {
+    background: #fff;
+    padding: 15px 0;
+}
+
+#subcontenido {
+    /*padding: 5px 15px 5px 15px*/
+}
+
+/* PIE */
+#pie {
+    background: #b0aeae;
+}
+
+#copyright {
+    /*margin: 0;*/
+    padding: 10px 0;
+    background: #78797c;
+    /*text-align: center;*/
+    color: #cccccc;
+    font-weight: bold;
+    font-size: .9em;
+}
+
+/* FORMULARIO CARGA FICHERO */
+.formulario {
+    margin: 25px 0 25px 0;
+}
+
+.boton {
+    margin: 0 5px;
+    padding: 1px 6px;
+}
+
+/* TABLA SOLO LECTURA */
+.tablareadonly {
+    padding: 20px;
+    width: 100%;
+}
+
+.tablareadonly th {
+    padding: 5px;
+    border: solid;
+}
+
+.tablareadonly td {
+    padding: 5px;
+}
+
+/* MINI TABLA EDITABLE */
+.minitablaeditable {
+    padding: 15px 0 15px 0;
+    width: auto;
+}
+
+.minitablaeditable th {
+    background: #005A84;
+    color: #fff;
+    border: 0;
+    padding: 5px;
+}
+
+.minitablaeditable td {
+    border: solid 1px;
+    padding: 5px;
+}
+
+.minitablaeditable .celdaeditada input[type=text] {
+    width: 100%;
+    border: 0;
+    background-color: rgb(255, 253, 210);
+}
+
+/* TABLA EDITABLE */
+.tablaeditable {
+    padding: 15px 0 5px 0;
+    width: 100%;
+}
+
+.tablaeditable thead {
+    background: #005A84;
+    color: #fff;
+    border: 0;
+}
+
+.tablaeditable td {
+    border: solid 1px;
+    padding: 5px;
+}
+
+.tablaeditable .celdaeditada input[type=text] {
+    width: 100%;
+    border: 0;
+    background-color: rgb(255, 253, 210);
+}
+
+.listado p {
+    margin-top: 4px;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0;
+}
+
+.less-bottom-margin {
+    margin-bottom: 10px;
+}
+
+.bottom-margin {
+    margin-bottom: 10px;
+}
