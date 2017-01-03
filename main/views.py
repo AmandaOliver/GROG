@@ -170,51 +170,36 @@ class PuntoUpdateView(View):
         dni = username_to_dni(request.user.username)
         punto = self.get_object(Punto, pk=pk)
         form = UpdatePuntoForm(instance=punto, org=organos_miembro(dni))
-        DocumentosFormSet = modelformset_factory(Documentos, form=DocumentoForm, can_delete=True, extra=1)
         queryset = Documentos.objects.filter(punto=punto)
-        formset = DocumentosFormSet(queryset=queryset)
         context = {
             'form': form,
             'punto': punto,
-            'tipo': "general",
-            'formset': formset
+            'tipo': "general"
         }
         return render(request, 'main/punto_update.html', context)
 
     def post(self, request, pk):
         punto = self.get_object(Punto, pk=pk)
-        DocumentosFormSet = modelformset_factory(Documentos, form=DocumentoForm, can_delete=True, extra=1)
         queryset = Documentos.objects.filter(punto=punto)
         dni = username_to_dni(request.user.username)
         form = UpdatePuntoForm(request.POST, instance=punto, org=organos_miembro(dni))
-        formset = DocumentosFormSet(request.POST, request.FILES, queryset=queryset)
-        instances = formset.save(commit=False)
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
             form.save()
-            if formset.deleted_objects:
-                for obj in formset.deleted_objects:
-                    os.unlink(obj.documento.path)
-                    try:
-                        dirind = obj.documento.path.rfinf('/')
-                        dir = obj.fichero.path[:dirind]
-                        os.removedirs(dir)
-                    except:
-                        pass
-                    obj.delete()
-            for form in formset.cleaned_data:
-                if form.get('documentos') is not None:
-                    documento = form.get('documentos')
-                    doc = Documentos(punto=punto, documento=documento)
-                    doc.save()
-                return redirect(reverse_lazy('punto_consensuado', kwargs={'pk': punto.pk}))
+            return redirect(reverse_lazy('punto_consensuado', kwargs={'pk': punto.pk}))
         return render(request, 'main/punto_update.html', {'form': form, 'punto': punto, 'tipo': "general",
                                                           'formset': formset})
 
 
 class PuntoUpdateResolucionView(View):
+    def get_object(self, queryset=None, pk=None):
+        obj = Punto.objects.get(id=self.kwargs['pk'])
+        if obj.estado_punto == 'CONV':
+            return obj
+        else:
+            return None
 
     def get(self, request, punto_pk, reunion_pk):
-        punto = Punto.objects.get(pk=punto_pk)
+        punto = self.get_object(Punto, pk=punto_pk)
         form = UpdatePuntoResolucionForm(instance=punto)
         context = {
             'form': form,
@@ -509,8 +494,15 @@ class ReunionDeleteView(DeleteView):
     success_url = reverse_lazy('reuniones_list')
     template_name = "main/reunion_delete.html"
 
+    def get_object(self, queryset=None, pk=None):
+        obj = Reunion.objects.get(id=self.kwargs['pk'])
+        if obj.estado_reunion == 'CRE':
+            return obj
+        else:
+            return None
+
     def delete(self, request, *args, **kwargs):
-        reunion = self.get_object()
+        reunion = self.get_object(Reunion, pk=self.kwargs['pk'])
         ordenes = Orden.objects.filter(reunion=reunion)
         for orden in ordenes:
             if orden.punto.estado_punto_anterior:
@@ -522,9 +514,15 @@ class ReunionDeleteView(DeleteView):
         return redirect('reuniones_list')
 
 class ConvocarReunionView(View):
+    def get_object(self, queryset=None, pk=None):
+        obj = Reunion.objects.get(id=self.kwargs['pk'])
+        if obj.estado_reunion == 'CRE':
+            return obj
+        else:
+            return None
 
     def get(self, request, pk):
-        reunion = Reunion.objects.get(pk=pk)
+        reunion = self.get_object(Reunion, pk=self.kwargs['pk'])
         reunion.estado_reunion = 'CONV'
         reunion.save()
         ordenes = Orden.objects.filter(reunion=reunion)
@@ -552,9 +550,15 @@ class ConvocarReunionView(View):
 
 
 class DesconvocarReunionView(View):
+    def get_object(self, queryset=None, pk=None):
+        obj = Reunion.objects.get(id=self.kwargs['pk'])
+        if obj.estado_reunion == 'CONV':
+            return obj
+        else:
+            return None
 
     def get(self, request, pk):
-        reunion = Reunion.objects.get(pk=pk)
+        reunion = self.get_object(Reunion, pk=self.kwargs['pk'])
         reunion.estado_reunion = 'CRE'
         reunion.save()
         ordenes = Orden.objects.filter(reunion=reunion)
@@ -580,9 +584,16 @@ class DesconvocarReunionView(View):
 
 
 class CerrarActaView(View):
+    def get_object(self, queryset=None, pk=None):
+        obj = Reunion.objects.get(id=self.kwargs['pk'])
+        if obj.estado_reunion == 'CONV':
+            return obj
+        else:
+            return None
+
     # Cambiar estado de los puntos tratados
     def get(self, request, pk):
-        reunion = Reunion.objects.get(pk=pk)
+        reunion = self.get_object(Reunion, pk=self.kwargs['pk'])
         reunion.estado_reunion = 'CELE'
         reunion.save()
         return HttpResponseRedirect(reverse_lazy('reunion_detail', args=[pk]))

@@ -17,7 +17,7 @@ class CreatePuntoForm(forms.ModelForm):
     tipo_punto = forms.ChoiceField(label='Tipo de punto', choices=TIPOS_PUNTOS)
     requiere_elevacion = forms.BooleanField(label=u"¿Requiere ser elevado a aprobación o información del Consejo"
                                                   " de Gobierno?", required=False)
-    invitados = MultiEmailField(help_text='Introducir un email por línea, sin comas', required=False)
+    # invitados = MultiEmailField(help_text='Introducir un email por línea, sin comas', required=False)
     comentarios = forms.CharField(label='Breve Descripción', widget=forms.Textarea, required=False)
 
     class Meta:
@@ -37,7 +37,7 @@ class DocumentoForm(forms.ModelForm):
 class UpdatePuntoForm(forms.ModelForm):
     nombre_original = forms.CharField(label='Nombre')
     tipo_punto = forms.ChoiceField(label='Tipo de punto', choices=TIPOS_PUNTOS)
-    invitados = MultiEmailField(help_text='Introducir un email por línea, sin comas', required=False)
+    # invitados = MultiEmailField(help_text='Introducir un email por línea, sin comas', required=False)
     estado_punto = forms.ChoiceField(label='Estado del punto', choices=ESTADO_PUNTOS)
     requiere_elevacion = forms.BooleanField(label=u"¿Requiere ser elevado a aprobación o información del Consejo"
                                                   " de Gobierno?", required=False)
@@ -78,13 +78,15 @@ class UpdateAdminPuntoForm(forms.ModelForm):
     nombre_admin = forms.CharField(label='Nombre dado por el Secretario', required=False)
     comentarios_admin = forms.CharField(label='Comentarios del Secretario', widget=forms.Textarea, required=False)
     tipo_punto = forms.ChoiceField(label='Tipo de punto', choices=TIPOS_PUNTOS)
-    invitados = MultiEmailField(help_text='Introducir un email por línea, sin comas', required=False)
+    # invitados = MultiEmailField(help_text='Introducir un email por línea, sin comas', required=False)
     estado_punto = forms.ChoiceField(label='Estado del punto', choices=ESTADO_PUNTOS)
     organo = forms.ChoiceField(label="Órgano")
+    requiere_elevacion = forms.BooleanField(label=u"¿Requiere ser elevado a aprobación o información del Consejo"
+                                                  " de Gobierno?", required=False)
 
     class Meta:
         model = Punto
-        exclude = ['creador', 'fecha_creacion', 'fecha_modificacion', 'estado_punto_anterior', 'consensuado_con']
+        exclude = ['resolucion', 'creador', 'fecha_creacion', 'fecha_modificacion', 'estado_punto_anterior', 'consensuado_con']
 
     def __init__(self, *args, **kwargs):
         org = kwargs.pop('org')

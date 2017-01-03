@@ -27,7 +27,7 @@ class Punto(models.Model):
     estado_punto = models.CharField(max_length=4, choices=ESTADO_PUNTOS, default=SIN_TRATAR)
     estado_punto_anterior = models.CharField(max_length=4, choices=ESTADO_PUNTOS, blank=True)
     creador = models.ForeignKey(settings.AUTH_USER_MODEL)
-    invitados = MultiEmailField(null=True, blank=True)
+    # invitados = MultiEmailField(null=True, blank=True)
     resolucion = models.TextField(null=True, blank=True)
     consensuado_con = models.TextField(blank=True, null=True)
     seguimiento = models.TextField(blank=True, null=True)

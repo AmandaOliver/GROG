@@ -97,25 +97,25 @@
                 <p class="list-group-item-text">{{ punto.creador }}</p><br>
             </div>
 
-{#            {% if view.documentos_list != "None" %}#}
-{#                <div class="list-group-item">#}
-{#                    <h4 class="list-group-item-heading">Documentos adjuntos:</h4>#}
-{#                    {%  for doc in view.documentos_list %}#}
-{#                        <p class="list-group-item-text"><a href="{{ doc.documento.url }}">{{ doc.documento|filename }}</a></p><br>#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#            {% endif %}#}
-
-            <div class="list-group-item">
-                <h4 class="list-group-item-heading">Invitados:</h4>
-                {% if not punto.invitados %}
-                    <p class="list-group-item-text">No hay invitados</p><br>
-                {% else %}
-                    {% for invitado in punto.invitados %}
-                        <p class="list-group-item-text">{{ invitado }}</p></br>
+            {% if view.documentos_list != "None" %}
+                <div class="list-group-item">
+                    <h4 class="list-group-item-heading">Documentos adjuntos:</h4>
+                    {%  for doc in view.documentos_list %}
+                        <p class="list-group-item-text"><a href="{{ doc.documento.url }}">{{ doc.documento|filename }}</a></p><br>
                     {% endfor %}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
+
+{#            <div class="list-group-item">#}
+{#                <h4 class="list-group-item-heading">Invitados:</h4>#}
+{#                {% if not punto.invitados %}#}
+{#                    <p class="list-group-item-text">No hay invitados</p><br>#}
+{#                {% else %}#}
+{#                    {% for invitado in punto.invitados %}#}
+{#                        <p class="list-group-item-text">{{ invitado }}</p></br>#}
+{#                    {% endfor %}#}
+{#                {% endif %}#}
+{#            </div>#}
 
             {% if punto.estado_punto != 'ST' %}
                 <div class="list-group-item">
