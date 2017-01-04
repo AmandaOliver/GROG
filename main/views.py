@@ -187,7 +187,7 @@ class PuntoUpdateView(View):
             form.save()
             return redirect(reverse_lazy('punto_consensuado', kwargs={'pk': punto.pk}))
         return render(request, 'main/punto_update.html', {'form': form, 'punto': punto, 'tipo': "general",
-                                                          'formset': formset})
+                                                          })
 
 
 class PuntoUpdateResolucionView(View):
@@ -328,6 +328,9 @@ class ReunionCreateView(View):
         form = CreateReunionForm(request.POST)
         organo = request.session.get('organo')
         formset = OrdenFormSet(request.POST, queryset=Orden.objects.none(), form_kwargs={'organo': organo})
+        if self.hay_puntos_repetidos(formset):
+            return render(request, 'main/create_reunion.html', {'form': form, 'formset': formset,
+                                                                'error': 'Por favor, seleccione cada propuesta una única vez'})
         if form.is_valid() and formset.is_valid():
             reunion = form.save(commit=False)
             reunion.creador = self.request.user
@@ -352,8 +355,14 @@ class ReunionCreateView(View):
             return redirect(reverse_lazy('reuniones_list'))
         return render(request, 'main/create_reunion.html', {'form': form, 'formset': formset})
 
-
-
+    def hay_puntos_repetidos(self, formset):
+        puntos = []
+        for count, form in enumerate(formset.cleaned_data):
+            puntos.append(form.get('punto'))
+        if len(set(puntos)) == len(puntos):
+            return False
+        else:
+            return True
 
 
 class ReunionAsistentesView(View):

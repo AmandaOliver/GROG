@@ -68,7 +68,19 @@
                             </td>
                         </tr>
                     {% endif %}
+
                 {% endfor %}
+                {% if error %}
+                        <div>
+                            <div class="col-md-5 col-md-offset-3" colspan="3" style="border-top:0 !important;">
+                                <div class="alert alert-danger">
+                                    <span class="fa fa-warning"></span>
+                                    <strong>Se han detectado errores:</strong>
+                                    <ul>{{ error }}</ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </tbody>
             </table>
             <div class="col-md-offset-2" id="boton-mas">
@@ -81,6 +93,7 @@
             <br><br>
             {% buttons submit='OK' field_class="col-md-9 col-md-offset-3" %}{% endbuttons %}
         </form>
+
     </fieldset>
     <script>
 $(document).ready( function() {
