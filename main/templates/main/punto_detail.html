@@ -73,7 +73,7 @@
                 {% elif punto.estado_punto == 'ST' %}
                     <p class="list-group-item-text">Sin tratar</p><br>
                 {% elif punto.estado_punto == 'TRAS' %}
-                    <p class="list-group-item-text">Trasladado a otro Consejo</p><br>
+                    <p class="list-group-item-text">Trasladado a otra reunión</p><br>
                 {% elif punto.estado_punto == 'RECH' %}
                     <p class="list-group-item-text">Rechazado</p><br>
                 {% elif punto.estado_punto == 'CONV' %}
@@ -131,12 +131,5 @@
             </div>
         </div>
     </fieldset>
-
-    {% if view.usuario_tiene_permiso and request.user.username != punto.creador.username %}
-        <a class="col-md-2 col-md-offset-5 btn btn-primary btn-success"
-            href="">
-            Enviar Correo al Creador
-        </a>
-    {% endif %}
 
 {% endblock %}

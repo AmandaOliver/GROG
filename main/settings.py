@@ -26,7 +26,7 @@ ESTADO_PUNTOS = (
     (APROBADO, "Aprobado por Consejo de Dirección"),
     (DELIBERADO, "Deliberado"),
     (SIN_TRATAR, "Sin tratar"),
-    (TRASLADADO, "Trasladado a otro Consejo"),
+    (TRASLADADO, "Trasladado a otra reunión"),
     (RECHAZADO, "Rechazado"),
     (CONVOCADO, "Convocado"),
     (ADDED, "Añadido a una reunión"),

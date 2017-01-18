@@ -191,15 +191,9 @@ class PuntoUpdateView(View):
 
 
 class PuntoUpdateResolucionView(View):
-    def get_object(self, queryset=None, pk=None):
-        obj = Punto.objects.get(id=self.kwargs['pk'])
-        if obj.estado_punto == 'CONV':
-            return obj
-        else:
-            return None
 
     def get(self, request, punto_pk, reunion_pk):
-        punto = self.get_object(Punto, pk=punto_pk)
+        punto = Punto.objects.get(pk=punto_pk)
         form = UpdatePuntoResolucionForm(instance=punto)
         context = {
             'form': form,

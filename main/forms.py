@@ -38,7 +38,7 @@ class UpdatePuntoForm(forms.ModelForm):
     nombre_original = forms.CharField(label='Nombre')
     tipo_punto = forms.ChoiceField(label='Tipo de punto', choices=TIPOS_PUNTOS)
     # invitados = MultiEmailField(help_text='Introducir un email por línea, sin comas', required=False)
-    estado_punto = forms.ChoiceField(label='Estado del punto', choices=ESTADO_PUNTOS)
+    # estado_punto = forms.ChoiceField(label='Estado del punto', choices=ESTADO_PUNTOS)
     requiere_elevacion = forms.BooleanField(label=u"¿Requiere ser elevado a aprobación o información del Consejo"
                                                   " de Gobierno?", required=False)
     organo = forms.ChoiceField(label="Órgano")
@@ -46,7 +46,7 @@ class UpdatePuntoForm(forms.ModelForm):
     class Meta:
         model = Punto
         exclude = ['nombre_admin', 'comentarios_admin', 'fecha_creacion', 'fecha_modificacion',
-                   'creador', 'resolucion', 'estado_punto_anterior', 'consensuado_con']
+                   'creador', 'resolucion', 'estado_punto_anterior', 'consensuado_con', 'estado_punto']
 
     def __init__(self, *args, **kwargs):
         org = kwargs.pop('org')
